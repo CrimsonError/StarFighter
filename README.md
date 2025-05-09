@@ -1,6 +1,4 @@
-# StarFighter Game  
-
-![Starfighter Game Demo](demo.gif) *(Optional: Add a GIF or screenshot of the game in action)*  
+# StarFighter Game by CrimsonError
 
 ## 🚀 Description  
 A Java-based 2D space shooter game where you control a **Starfighter** to defend your space from enemy ships. This project demonstrates **object-oriented programming (OOP)** concepts like **inheritance, abstract classes, and interfaces**, along with **ArrayLists, matrices, loops, and conditionals**.  
