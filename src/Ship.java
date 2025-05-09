@@ -20,14 +20,13 @@ public class Ship extends MovingThing {
 	}
 
 	public Ship(int x, int y, int w, int h, int s) {
-		// add code here
+		super(x, y, w, h);
+		speed = s;
 		try {
-			// this sets ship.jpg as the image for your ship
-			// for this to work ship.jpg needs to be in the same folder as this .java file
 			URL url = getClass().getResource("ship.jpg");
 			image = ImageIO.read(url);
 		} catch (Exception e) {
-			// feel free to do something here or not
+			System.err.println("Error: ship.jpg not found");
 		}
 	}
 
@@ -40,7 +39,18 @@ public class Ship extends MovingThing {
 	}
 
 	public void move(String direction) {
-		
+		if (direction.equals("LEFT") && getX() > 0) {
+			setX(getX() - speed);
+		}
+		if (direction.equals("RIGHT") && getX() > 0) {
+			setX(getX() - speed);
+		}
+		if (direction.equals("UP") && getY() > 0) {
+			setX(getY() - speed);
+		}
+		if (direction.equals("DOWN") && getY() > 0) {
+			setX(getY() - speed);
+		}
 	}
 
 	public void draw(Graphics window) {
