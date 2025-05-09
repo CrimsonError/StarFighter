@@ -1,18 +1,46 @@
-## Getting Started
+StarFighter Game
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Starfighter Game Demo (Optional: Add a GIF or screenshot of the game in action)
+🚀 Description
 
-## Folder Structure
+A Java-based 2D space shooter game where you control a Starfighter to defend your space from enemy ships. This project demonstrates object-oriented programming (OOP) concepts like inheritance, abstract classes, and interfaces, along with ArrayLists, matrices, loops, and conditionals.
+✨ Features
 
-The workspace contains two folders by default, where:
+    Player-controlled Starfighter – Move and shoot using keyboard inputs.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+    Enemy ships – Randomly generated enemies with varying behaviors.
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+    Collision detection – Bullets, player, and enemies interact dynamically.
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+    Score system – Earn points for destroying enemies.
 
-## Dependency Management
+    OOP Design – Uses:
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+        Inheritance (e.g., Ship → PlayerShip / EnemyShip)
+
+        Abstract classes (e.g., AbstractShip)
+
+        Interfaces (e.g., Shootable, Movable)
+
+🛠️ Installation & Running the Game
+
+    Prerequisites:
+
+        Java JDK (version 8 or higher)
+
+        Git (optional, if cloning the repo)
+
+    Clone & Run:
+    bash
+
+    `git clone [your-repository-url]  
+    cd starfighter-game  
+    javac *.java  
+    java Main`
+
+(Alternatively, if you're using an IDE like IntelliJ/Eclipse, import the project and run Main.java.)
+🎮 Controls
+
+    WASD / Arrow Keys → Move ship
+
+    Spacebar → Shoot
