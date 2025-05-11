@@ -21,7 +21,7 @@ public class Ship extends MovingThing {
 
 	public Ship(int x, int y, int w, int h, int s) {
 		super(x, y, w, h);
-		speed = s;
+		this.speed = s;
 		try {
 			URL url = getClass().getResource("ship.jpg");
 			image = ImageIO.read(url);
@@ -38,18 +38,16 @@ public class Ship extends MovingThing {
 		return speed;
 	}
 
+	// make this symmetric in the bounds
 	public void move(String direction) {
-		if (direction.equals("LEFT") && getX() > 0) {
+		if (direction.equals("LEFT") && getX() >= 0) {
 			setX(getX() - speed);
-		}
-		if (direction.equals("RIGHT") && getX() > 0) {
-			setX(getX() - speed);
-		}
-		if (direction.equals("UP") && getY() > 0) {
-			setX(getY() - speed);
-		}
-		if (direction.equals("DOWN") && getY() > 0) {
-			setX(getY() - speed);
+		} else if (direction.equals("RIGHT") && getX() <= 750) {
+			setX(getX() + speed);
+		} else if (direction.equals("UP") && getY() >= 0) {
+			setY(getY() - speed);
+		} else if (direction.equals("DOWN") && getY() <= 520) {
+			setY(getY() + speed);
 		}
 	}
 

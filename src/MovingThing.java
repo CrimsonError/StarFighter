@@ -5,7 +5,7 @@ public abstract class MovingThing implements Moveable {
 	int y;
 	int width;
 	int height;
-	//set x set y get x get y  get width get height
+
 	public MovingThing() {
 		this(10, 10, 10, 10);
 	}

@@ -28,6 +28,8 @@ public class OuterSpace extends Canvas implements KeyListener, Runnable {
 
 		keys = new boolean[5];
 
+		ship = new Ship(310, 450, 5);
+
 		this.addKeyListener(this);
 		new Thread(this).start();
 
