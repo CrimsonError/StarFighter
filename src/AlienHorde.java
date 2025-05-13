@@ -14,14 +14,12 @@ public class AlienHorde {
 		int y = 50;
 		aliens = new ArrayList<Alien>();
 
-		for (int i = 0; i < size + 2; i++) {
-			aliens.add(new Alien(x, y, 30, 30, 1));
-			x += 75;
-			// fix this bounds issue to consider the window length
-			if (x > 775) {
-				y += 75;
+		for (int i = 0; i < size; i++) {
+			if (x >= 800) {
 				x = 25;
-			}
+				y += 75;
+			} 
+			aliens.add(new Alien(x, y, 0));
 		}
 	}
 

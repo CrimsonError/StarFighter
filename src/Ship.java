@@ -8,20 +8,25 @@ public class Ship extends MovingThing {
 	private Image image;
 
 	public Ship() {
+		// default constructor with all default values init
 		this(0, 0, 50, 50, 0);
 	}
 
 	public Ship(int x, int y) {
+		// constructor with position only (default size and speed)
 		this(x, y, 50, 50, 0);
 	}
 
 	public Ship(int x, int y, int s) {
+		// constructor with position and speed (default size)
 		this(x, y, 50, 50, s);
 	}
 
 	public Ship(int x, int y, int w, int h, int s) {
-		super(x, y, w, h);
+		super(x, y, w, h); //calls MovingThing parent constructor
+		// this is technecally the real constructor in a way
 		this.speed = s;
+		// load ship image from resources
 		try {
 			URL url = getClass().getResource("ship.jpg");
 			image = ImageIO.read(url);
@@ -38,7 +43,7 @@ public class Ship extends MovingThing {
 		return speed;
 	}
 
-	// make this symmetric in the bounds
+	// these bounds work the best idk why just mass tested a bunch of stuff
 	public void move(String direction) {
 		if (direction.equals("LEFT") && getX() >= 0) {
 			setX(getX() - speed);
