@@ -13,10 +13,10 @@ import java.util.ArrayList;
 public class OuterSpace extends Canvas implements KeyListener, Runnable {
 
 	private AlienHorde horde;
-	// private Bullets shots;
+	private Bullets shots;
 	private Ship ship;
-	private Alien alienOne;
-	private Alien alienTwo;
+	//private Alien alienOne;
+	//private Alien alienTwo;
 
 	private boolean[] keys;
 	private BufferedImage back;
@@ -24,15 +24,15 @@ public class OuterSpace extends Canvas implements KeyListener, Runnable {
 	public OuterSpace() {
 		setBackground(Color.black);
 
-		// add objects to global vars
-
 		keys = new boolean[5];
 
 		ship = new Ship(310, 450, 5);
+		shots = new Bullets();
 		horde = new AlienHorde(20);
-		alienOne = new Alien(100, 50);
-		alienTwo = new Alien(150, 50);
-		
+		//alienOne = new Alien(150, 50);
+		//alienTwo = new Alien(100, 50);
+	
+
 		this.addKeyListener(this);
 		new Thread(this).start();
 
@@ -73,13 +73,14 @@ public class OuterSpace extends Canvas implements KeyListener, Runnable {
 		if (keys[3]) {
 			ship.move("DOWN");
 		}
+		if (keys[4]) {
+			shots.add(new Ammo(ship.getX() + 20, ship.getY(), 5));
+			System.out.println("this is working");
+			keys[4] = false;
+		}
 
-		// add code to fire a bullet - Part 3
+		horde.removeDeadOnes(null);
 
-		// add in collision detection to see if Bullets hit the Aliens and if Bullets
-		// hit the Ship -- Part 3
-
-		// make sure you've drawn all your stuff
 		ship.draw(graphToBack);
 		horde.drawEmAll(graphToBack);
 

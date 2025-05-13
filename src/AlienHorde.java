@@ -15,7 +15,7 @@ public class AlienHorde {
 		aliens = new ArrayList<Alien>();
 
 		for (int i = 0; i < size; i++) {
-			if (x >= 800) {
+			if (x >= 775) {
 				x = 25;
 				y += 75;
 			}
@@ -36,21 +36,28 @@ public class AlienHorde {
 
 	public void moveEmAll() {
 		for (Alien al : aliens) {
-			al.move("Yes");
+			al.move("idk");
 		}
 	}
 
-	/*
-	 * public void removeDeadOnes(List<Ammo> shots)
-	 * {
-	 * //Part 3
-	 * //for every shot in the list
-	 * //check if you've hit any alien in the list
-	 * //(do the coordinates of the shot fall between the boundarises of the alien)
-	 * //if they do then remove the alien and the shot
-	 * //make sure you break out of the loop if this happens
-	 * }
-	 */
+	public int removeDeadOnes(List<Ammo> shots) {
+        int count = 0;
+        if (shots.size() == 0 || aliens.size() == 0)
+            return 0;
+        for (int i = shots.size() - 1; i >= 0; i--) {
+            Ammo am = shots.get(i);
+            for (int j = aliens.size() - 1; j >= 0; j--) {
+                Alien al = aliens.get(j);
+                if (am.getX() - al.getX() <= 30 && am.getX() - al.getX() > -1 && am.getY() - al.getY() <= 30 && am.getY() - al.getY() > -1) {
+                    aliens.remove(j);
+                    shots.remove(i);
+                    count++;
+                    break;
+                }
+            }
+        }
+        return count;
+    }
 
 	public String toString() {
 		return "" + aliens;
