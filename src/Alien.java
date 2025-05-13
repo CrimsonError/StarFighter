@@ -39,7 +39,7 @@ public class Alien extends MovingThing {
 	}
 
 	public void move(String direction) {
-		if (getX() <= 0 || getX() >= 800) {
+		if(getX() <= 0 || getX() >= 775) {
 			setY(getY() + 40);
 			speed = -speed;
 		}

@@ -18,8 +18,8 @@ public class AlienHorde {
 			if (x >= 800) {
 				x = 25;
 				y += 75;
-			} 
-			aliens.add(new Alien(x, y, 0));
+			}
+			add(new Alien(x, y, 1));
 			x += 75;
 		}
 	}
@@ -36,7 +36,7 @@ public class AlienHorde {
 
 	public void moveEmAll() {
 		for (Alien al : aliens) {
-			al.move("idk");
+			al.move("Yes");
 		}
 	}
 
