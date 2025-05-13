@@ -20,6 +20,7 @@ public class AlienHorde {
 				y += 75;
 			} 
 			aliens.add(new Alien(x, y, 0));
+			x += 75;
 		}
 	}
 

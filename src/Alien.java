@@ -23,7 +23,7 @@ public class Alien extends MovingThing {
 		super(x, y, w, h);
 		speed = s;
 		try {
-			URL url = getClass().getResource("alien.jpg");
+			URL url = getClass().getResource("alien.JPG");
 			image = ImageIO.read(url);
 		} catch (Exception e) {
 			System.err.println("Error: no alien.jpg found!");
