@@ -22,7 +22,7 @@ public class Alien extends MovingThing {
 	public Alien(int x, int y, int w, int h, int s) {
 		super(x, y, w, h); // this inherits from MovingThing,
 		// where you need to pass size into the MovingThing parent constructor
-		speed = s;
+		speed = 0;
 		try {
 			URL url = getClass().getResource("alien.JPG");
 			image = ImageIO.read(url);
@@ -46,6 +46,7 @@ public class Alien extends MovingThing {
 		}
 		setX(getX() + speed); // move the alien left or right
 	}
+
 
 	/*
 	 * The draw method is done for you.

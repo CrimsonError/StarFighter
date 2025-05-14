@@ -34,6 +34,10 @@ public class Ammo extends MovingThing {
 		window.setColor(Color.YELLOW);
 	}
 
+	public boolean alCollision(Alien al) {
+		
+	}
+
 	public void move(String direction) {
 		setY(getY() - speed);
 	}

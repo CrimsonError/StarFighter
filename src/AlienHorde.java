@@ -11,7 +11,7 @@ public class AlienHorde {
 		aliens = new ArrayList<Alien>();
 
 		// Create a grid of aliens, if the alien hits the right side of the screen
-		// move down 75 px and start again at 25 px
+		// move down 75 px and start the alien again on the x axis at 25 px
 		for (int i = 0; i < size; i++) {
 			if (x >= 775) {
 				x = 25;
@@ -38,25 +38,28 @@ public class AlienHorde {
 		}
 	}
 
-	// if an ammo object has collided with an alien object, remove both
-	public int removeDeadOnes(List<Ammo> shots) {
-		int count = 0;
-		if (shots.size() == 0 || aliens.size() == 0)
-			return 0;
-		for (int i = shots.size() - 1; i >= 0; i--) {
-			Ammo am = shots.get(i);
-			for (int j = aliens.size() - 1; j >= 0; j--) {
-				Alien al = aliens.get(j);
-				if (am.getX() - al.getX() <= 30 && am.getX() - al.getX() > -1 && am.getY() - al.getY() <= 30
-						&& am.getY() - al.getY() > -1) {
-					aliens.remove(j);
-					shots.remove(i);
-					count++;
-					break;
-				}
+	public void removeAll() {
+		for (int i = aliens.size() - 1; i >= 0; i--) {
+			Alien al = aliens.get(i);
+			aliens.remove(al);
+		}
+	}
+
+	public boolean hitPlayer(Ship p) {
+		// cehck and see if aliens hit the ship
+		for (int i = aliens.size() - 1; i >= 0; i--) {
+			Alien al = aliens.get(i);
+			if (al.getX() - p.getX() <= 30 && al.getX() - p.getX() > -1 && al.getY() - p.getY() <= 30
+					&& al.getY() - p.getY() > -1) {
+				return true;
 			}
 		}
-		return count;
+		return false;
+	}
+
+	// if an ammo object has collided with an alien object, remove both
+	public int removeDeadOnes(List<Ammo> shots) { 
+
 	}
 
 	// le bounds:

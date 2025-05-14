@@ -59,7 +59,7 @@ public abstract class MovingThing implements Moveable {
 	}
 
 	// do not change code below this line
-	public abstract void move(String direction); // ts pmo
+	public abstract void move(String direction);
 
 	public abstract void draw(Graphics window);
 
