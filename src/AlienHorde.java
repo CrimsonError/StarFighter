@@ -1,8 +1,4 @@
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.io.File;
-import javax.imageio.ImageIO;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +10,15 @@ public class AlienHorde {
 		int y = 50;
 		aliens = new ArrayList<Alien>();
 
+		// Create a grid of aliens, if the alien hits the right side of the screen
+		// move down 75 px and start again at 25 px
 		for (int i = 0; i < size; i++) {
 			if (x >= 775) {
 				x = 25;
 				y += 75;
 			}
-			add(new Alien(x, y, 1));
-			x += 75;
+			add(new Alien(x, y, 1)); // add the new alien (speed is 1)
+			x += 75; // move to the right 75 px for the next alien in the list, so forth
 		}
 	}
 
@@ -40,24 +38,37 @@ public class AlienHorde {
 		}
 	}
 
+	// if an ammo object has collided with an alien object, remove both
 	public int removeDeadOnes(List<Ammo> shots) {
-        int count = 0;
-        if (shots.size() == 0 || aliens.size() == 0)
-            return 0;
-        for (int i = shots.size() - 1; i >= 0; i--) {
-            Ammo am = shots.get(i);
-            for (int j = aliens.size() - 1; j >= 0; j--) {
-                Alien al = aliens.get(j);
-                if (am.getX() - al.getX() <= 30 && am.getX() - al.getX() > -1 && am.getY() - al.getY() <= 30 && am.getY() - al.getY() > -1) {
-                    aliens.remove(j);
-                    shots.remove(i);
-                    count++;
-                    break;
-                }
-            }
-        }
-        return count;
-    }
+		int count = 0;
+		if (shots.size() == 0 || aliens.size() == 0)
+			return 0;
+		for (int i = shots.size() - 1; i >= 0; i--) {
+			Ammo am = shots.get(i);
+			for (int j = aliens.size() - 1; j >= 0; j--) {
+				Alien al = aliens.get(j);
+				if (am.getX() - al.getX() <= 30 && am.getX() - al.getX() > -1 && am.getY() - al.getY() <= 30
+						&& am.getY() - al.getY() > -1) {
+					aliens.remove(j);
+					shots.remove(i);
+					count++;
+					break;
+				}
+			}
+		}
+		return count;
+	}
+
+	// le bounds:
+	// if the horiz distance between ammo and alien is <= 30 && not to the left of
+	// the alien
+	// if the vert distance between ammo and alien is <= 30 && ammo is not above the
+	// alien
+	// subtracting gives the distance between the two objects
+
+	public List<Alien> getAliens() {
+		return aliens;
+	}
 
 	public String toString() {
 		return "" + aliens;

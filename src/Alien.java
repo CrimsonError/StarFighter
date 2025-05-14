@@ -20,7 +20,8 @@ public class Alien extends MovingThing {
 	}
 
 	public Alien(int x, int y, int w, int h, int s) {
-		super(x, y, w, h);
+		super(x, y, w, h); // this inherits from MovingThing,
+		// where you need to pass size into the MovingThing parent constructor
 		speed = s;
 		try {
 			URL url = getClass().getResource("alien.JPG");
@@ -39,18 +40,19 @@ public class Alien extends MovingThing {
 	}
 
 	public void move(String direction) {
-		if(getX() <= 0 || getX() >= 775) {
-			setY(getY() + 40);
-			speed = -speed;
+		if (getX() <= 0 || getX() >= 775) { // if the alien hits the left or right side of the screen
+			setY(getY() + 40); // move down 40 pixels
+			speed = -speed; // reverse direction
 		}
-		setX(getX() + speed);
+		setX(getX() + speed); // move the alien left or right
 	}
 
 	/*
 	 * The draw method is done for you.
 	 * This method will move the alien and update it's location on screen by
-	 * constantly redrawing it.
+	 * constantly rerdawing it.
 	 */
+
 	public void draw(Graphics window) {
 		move("DOWN");
 		window.drawImage(image, getX(), getY(), getWidth(), getHeight(), null);

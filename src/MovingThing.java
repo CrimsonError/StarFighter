@@ -17,8 +17,8 @@ public abstract class MovingThing implements Moveable {
 	public MovingThing(int x, int y, int w, int h) {
 		this.x = x;
 		this.y = y;
-		this.width = w;
-		this.height = h;
+		width = w;
+		height = h;
 	}
 
 	public void setPos(int x, int y) {
@@ -59,7 +59,7 @@ public abstract class MovingThing implements Moveable {
 	}
 
 	// do not change code below this line
-	public abstract void move(String direction);
+	public abstract void move(String direction); // ts pmo
 
 	public abstract void draw(Graphics window);
 

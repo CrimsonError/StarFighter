@@ -2,41 +2,48 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Canvas;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
-import static java.lang.Character.*;
 import java.awt.image.BufferedImage;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class OuterSpace extends Canvas implements KeyListener, Runnable {
 
 	private AlienHorde horde;
 	private Bullets shots;
 	private Ship ship;
-	//private Alien alienOne;
-	//private Alien alienTwo;
-
+	// private Alien alienOne;
+	// private Alien alienTwo;
 	private boolean[] keys;
 	private BufferedImage back;
+	private String difficulty;
+	private int countdown;
 
 	public OuterSpace() {
 		setBackground(Color.black);
 
 		keys = new boolean[5];
-
 		ship = new Ship(310, 450, 5);
 		shots = new Bullets();
-		horde = new AlienHorde(20);
-		//alienOne = new Alien(150, 50);
-		//alienTwo = new Alien(100, 50);
-	
+		countdown = 0;
 
-		this.addKeyListener(this);
+		this.addKeyListener(this); // add the key listener to the canvas
 		new Thread(this).start();
 
 		setVisible(true);
+	}
+
+	public OuterSpace(String d) {
+		this(); // call the default constructor to set up the game, else all the variables wont
+				// be initalized
+		difficulty = d;
+
+		if (difficulty.equals("Easy")) {
+			horde = new AlienHorde(10);
+		} else if (difficulty.equals("Medium")) {
+			horde = new AlienHorde(20);
+		} else if (difficulty.equals("Hard")) {
+			horde = new AlienHorde(30);
+		}
 	}
 
 	public void update(Graphics window) {
@@ -50,17 +57,17 @@ public class OuterSpace extends Canvas implements KeyListener, Runnable {
 
 		// take a snap shot of the current screen and save it as an image
 		// that is the exact same width and height as the current screen
+		// because the screen is constantly changing
+
 		if (back == null)
 			back = (BufferedImage) (createImage(getWidth(), getHeight()));
 
 		// create a graphics reference to the back ground image
 		// we will draw all changes on the background image
 		Graphics graphToBack = back.createGraphics();
-		// this sets the background for the graphics window
 		graphToBack.setColor(Color.BLACK);
 		graphToBack.fillRect(0, 0, getWidth(), getHeight());
 
-		// add code to move Ship, Alien, etc.-- Part 1
 		if (keys[0]) {
 			ship.move("LEFT");
 		}
@@ -73,17 +80,25 @@ public class OuterSpace extends Canvas implements KeyListener, Runnable {
 		if (keys[3]) {
 			ship.move("DOWN");
 		}
-		if (keys[4]) {
+
+		if (keys[4] && countdown == 0) { // adding 20 helps move the ammo pos so it appears to be fired from the center,
+			// get y so the bullet starts at the same pos as the ship
+			// and speed of 5 (obvious)
 			shots.add(new Ammo(ship.getX() + 20, ship.getY(), 5));
-			System.out.println("this is working");
+			countdown = 50;
 			keys[4] = false;
 		}
+		if (countdown > 0) {
+			countdown--;
+		}
 
-		horde.removeDeadOnes(null);
+		// drawing time yay
 
+		horde.removeDeadOnes(shots.getList());
+		shots.moveEmAll();
 		ship.draw(graphToBack);
 		horde.drawEmAll(graphToBack);
-
+		shots.drawEmAll(graphToBack);
 		twoDGraph.drawImage(back, null, 0, 0);
 		back = null;
 	}
