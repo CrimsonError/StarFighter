@@ -11,17 +11,17 @@ public class Main extends JFrame {
 
     @SuppressWarnings("unused")
     public Main() {
-        super("Star Fighter");
-        setSize(WIDTH, HEIGHT); // default height/width per instructions
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super("StarFighter");
+        setSize(WIDTH, HEIGHT); // 800 * 600 window for the main game
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // close the window when the x is pressed
 
         JDialog popup = new JDialog(this, "Main Menu", true);
-        popup.setSize(300, 200); // best looking size
-        popup.setResizable(false); // dont allow people to change the window size, may mess up formatting
+        popup.setSize(300, 200); // popup menu size
+        popup.setResizable(false);
         popup.setLayout(new GridLayout(4, 1));
 
         JLabel titleLabel = new JLabel("Select Difficulty to Start", JLabel.CENTER); // centeres the text in the box
-        popup.add(titleLabel); // you need to add all the titleelements to the object popout
+        popup.add(titleLabel); // each element must be added to the popup menu object
 
         JButton easy = new JButton("Easy");
         easy.addActionListener(e -> {
@@ -33,25 +33,25 @@ public class Main extends JFrame {
         JButton medium = new JButton("Medium");
         medium.addActionListener(e -> {
             runGame("Medium");
-            popup.dispose(); // closes the popup after the button is activated
+            popup.dispose(); 
         });
         popup.add(medium);
 
         JButton hard = new JButton("Hard");
         hard.addActionListener(e -> {
             runGame("Hard");
-            popup.dispose(); // any option closes the popup, this stuff in here is only fired when the button is pressed
+            popup.dispose();
         });
         popup.add(hard);
-        popup.setVisible(true); // set the menu to vis so you can see it
+        popup.setVisible(true); // set the menu to visible so you can see it
     }
 
-    public void runGame(String difficulty) { // might be a better way but this i feel is the easiest
+    public void runGame(String difficulty) { 
         OuterSpace theGame = new OuterSpace(difficulty);
         theGame.requestFocus();
-        ((Component) theGame).setFocusable(true); // keeps the game focused in a tab manager
+        ((Component) theGame).setFocusable(true); // so you can interact with the window
         getContentPane().add(theGame);
-        setVisible(true); // makes the actual star fighter game appear
+        setVisible(true); // makes the actual star fighter game appear so you can interact with it
     }
 
     public static void main(String args[]) {

@@ -29,13 +29,31 @@ public class Ammo extends MovingThing {
 		return speed;
 	}
 
-	public void draw(Graphics window) {
-		window.fillRect(getX(), getY(), getWidth(), getHeight());
-		window.setColor(Color.YELLOW);
+	/*
+	 * Makes sure the left side of the ship is to the left of the right side of the
+	 * alien
+	 * Right side of the ship is to the right of the left side of the alien
+	 * Top side of the ship is above the bottom side of the alien
+	 * Bottom side of the ship is below the top side of the alien
+	 */
+
+	public boolean hitAlien(Alien al) {
+
+		int ax = al.getX();
+		int ay = al.getY();
+		int awid = al.getWidth();
+		int ahei = al.getHeight();
+		int bx = getX();
+		int by = getY();
+		int bwid = getWidth();
+		int bhei = getHeight();
+
+		return bx < ax + awid && bx + bwid > ax && by < ay + ahei && by + bhei > ay;
 	}
 
-	public boolean alCollision(Alien al) {
-		
+	public void draw(Graphics window) {
+		window.setColor(Color.YELLOW);
+		window.fillRect(getX(), getY(), getWidth(), getHeight());
 	}
 
 	public void move(String direction) {

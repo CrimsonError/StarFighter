@@ -10,15 +10,38 @@ public class AlienHorde {
 		int y = 50;
 		aliens = new ArrayList<Alien>();
 
-		// Create a grid of aliens, if the alien hits the right side of the screen
-		// move down 75 px and start the alien again on the x axis at 25 px
 		for (int i = 0; i < size; i++) {
-			if (x >= 775) {
+			if (x >= 800) {
 				x = 25;
 				y += 75;
 			}
-			add(new Alien(x, y, 1)); // add the new alien (speed is 1)
-			x += 75; // move to the right 75 px for the next alien in the list, so forth
+			add(new Alien(x, y, 1));
+			x += 75;
+		}
+	}
+
+	/*
+	 * start the first alien at 25 px on the x axis
+	 * start the first alien at 50 px on the y axis
+	 * if the x coordinate is greater than 800 (off the screen)
+	 * reset x to 25
+	 * and move down 75 px on the y axis
+	 * add that new alien at the specified position
+	 * increment x by 75 px for the next alien, and repeat the loop
+	 */
+
+	public AlienHorde(int size, int speed) {
+		int x = 25;
+		int y = 50;
+		aliens = new ArrayList<Alien>();
+
+		for (int i = 0; i < size; i++) {
+			if (x >= 800) {
+				x = 25;
+				y += 75;
+			}
+			add(new Alien(x, y, speed));
+			x += 75;
 		}
 	}
 
@@ -45,29 +68,45 @@ public class AlienHorde {
 		}
 	}
 
+	/*
+	 * Makes sure the left side of the ship is to the left of the right side of the
+	 * alien
+	 * Right side of the ship is to the right of the left side of the alien
+	 * Top side of the ship is above the bottom side of the alien
+	 * Bottom side of the ship is below the top side of the alien
+	 */
+
 	public boolean hitPlayer(Ship p) {
-		// cehck and see if aliens hit the ship
-		for (int i = aliens.size() - 1; i >= 0; i--) {
-			Alien al = aliens.get(i);
-			if (al.getX() - p.getX() <= 30 && al.getX() - p.getX() > -1 && al.getY() - p.getY() <= 30
-					&& al.getY() - p.getY() > -1) {
+		for (int i = 0; i < aliens.size(); i++) {
+			int ax = aliens.get(i).getX();
+			int ay = aliens.get(i).getY();
+			int awid = aliens.get(i).getWidth();
+			int ahei = aliens.get(i).getHeight();
+			int bx = p.getX();
+			int by = p.getY();
+			int bwid = p.getWidth();
+			int bhei = p.getHeight();
+
+			if (bx < ax + awid && bx + bwid > ax && by < ay + ahei && by + bhei > ay) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	// if an ammo object has collided with an alien object, remove both
-	public int removeDeadOnes(List<Ammo> shots) { 
-
+	// checks if the ammo hit the alien
+	public int removeDeadOnes(List<Ammo> shots) {
+		for (int i = shots.size() - 1; i >= 0; i--) {
+			for (int j = aliens.size() - 1; j >= 0; j--) {
+				if (shots.get(i).hitAlien(aliens.get(j))) {
+					aliens.remove(j);
+					shots.remove(i);
+					return 1;
+				}
+			}
+		}
+		return 0;
 	}
-
-	// le bounds:
-	// if the horiz distance between ammo and alien is <= 30 && not to the left of
-	// the alien
-	// if the vert distance between ammo and alien is <= 30 && ammo is not above the
-	// alien
-	// subtracting gives the distance between the two objects
 
 	public List<Alien> getAliens() {
 		return aliens;

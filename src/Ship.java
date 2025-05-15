@@ -21,7 +21,7 @@ public class Ship extends MovingThing {
 
 	public Ship(int x, int y, int w, int h, int s) {
 		super(x, y, w, h);
-		this.speed = 1;
+		speed = s;
 		try {
 			URL url = getClass().getResource("ship.jpg");
 			image = ImageIO.read(url);

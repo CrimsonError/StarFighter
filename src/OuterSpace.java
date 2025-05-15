@@ -9,10 +9,7 @@ import java.awt.Canvas;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 import javax.imageio.ImageIO;
-import java.awt.Image;
 
 public class OuterSpace extends Canvas implements KeyListener, Runnable {
 
@@ -26,43 +23,42 @@ public class OuterSpace extends Canvas implements KeyListener, Runnable {
 	private String difficulty;
 	private int countdown; // ammo cooldown timer
 	private int lives;
-	private int hit;
-	private Image heartImage;
+	private int hit; // hit counter for flicker effect
+	private BufferedImage heartImage; // imported life counter
 
 	public OuterSpace() {
 		setBackground(Color.black);
 
 		keys = new boolean[5];
-		ship = new Ship(310, 450, 5);
+		ship = new Ship(310, 450, 5); // new ship object at 310, 450 with speed of 5
 		shots = new Bullets();
 		countdown = 0;
 		lives = 3;
 		hit = 0;
 
-		URL url = getClass().getResource("pixelheart.png");
+		// import the heart image for the life counter
 		try {
-			heartImage = ImageIO.read(url);
-		} catch (IOException e) {
+			heartImage = ImageIO.read(getClass().getResource("pixelheart.png"));
+		} catch (Exception e) {
+			heartImage = null;
 			System.err.println("Error: pixelheart.png not found!");
 		}
 
-		this.addKeyListener(this); // add the key listener to the canvas
+		this.addKeyListener(this);
 		new Thread(this).start();
-
 		setVisible(true);
 	}
 
 	public OuterSpace(String d) {
-		this(); // call the default constructor to set up the game, else all the variables wont
-				// be initalized
-		difficulty = d;
+		this(); // call the default constructor to initalize the game
+		difficulty = d; // initalize difficulty
 
 		if (difficulty.equals("Easy")) {
-			horde = new AlienHorde(10);
+			horde = new AlienHorde(10, 1); // 10 aliens, speed 1
 		} else if (difficulty.equals("Medium")) {
-			horde = new AlienHorde(20);
+			horde = new AlienHorde(20, 3); // 20 aliens, speed 3
 		} else if (difficulty.equals("Hard")) {
-			horde = new AlienHorde(30);
+			horde = new AlienHorde(30, 5); // 30 aliens, speed 5
 		}
 	}
 
@@ -74,43 +70,47 @@ public class OuterSpace extends Canvas implements KeyListener, Runnable {
 		// set up the double buffering to make the game animation nice and smooth
 		Graphics2D twoDGraph = (Graphics2D) window;
 
-		// take a snap shot of the current screen and save it as an image
-		// that is the exact same width and height as the current screen
-		// because the screen is constantly changing
+		/*
+		 * take a snap shot of the current screen and save it as an image
+		 * that is the exact same width and height as the current screen
+		 * because the screen is constantly changing
+		 */ 
 
 		if (back == null)
 			back = (BufferedImage) (createImage(getWidth(), getHeight()));
+
 		// create a graphics reference to the back ground image
 		// we will draw all changes on the background image
 		Graphics graphToBack = back.createGraphics();
 		graphToBack.setColor(Color.BLACK);
 		graphToBack.fillRect(0, 0, getWidth(), getHeight());
 
-		
-
 		if (lives <= 0) {
-			horde.removeAll();
-			graphToBack.setColor(Color.RED);
-			graphToBack.drawString("GAME OVER", 100, 300);
-
+			horde.removeAll(); // kill all aliens
+			graphToBack.setColor(Color.RED); // change the background color to red
+			graphToBack.drawString("GAME OVER", 100, 300); // draw the game over message
 		}
 
-		if (hit > 0) { // checks if the ship has recently been hit and is in its flickering phase.
-			if (hit % 2 == 0) {
-				// draws the ship every other frame while it has been reccently hit, creating
-				// the flicker effect
-				// decreasing ever frame until it stops
-				ship.draw(graphToBack); // draws the ship visable on some frames and not on others
-			}
-			hit--; // decreases hit, ill gradually stop until hit reaches 0
-		} else { // runs when the ship is in its normal state not greater than 0
-			if (horde.hitPlayer(ship)) { // if alien collide with ship
-				lives -= 1;
-				hit = 200; // sets it to 400, triggering the fikering effect again cuz hit > 0 to indicate
-							// dmg
-			}
-			ship.draw(graphToBack); // draws the ship normally when it's not flickering
-		}
+		/*
+		 * the flicker effect, ship blinks twice when hit
+		 * blink off for 20 frames, on for 20 frames (%), and repeat that twice
+		 * normal starting condition will have the else happen, drawing it normally
+		 * total of 80 for 4 on/off cycles of 20
+		 */
+
+        if (hit > 0) {
+            
+            if ((hit / 20) % 2 == 0) { 
+                ship.draw(graphToBack);
+            }
+            hit--;
+        } else {
+            ship.draw(graphToBack);
+            if (horde.hitPlayer(ship)) { 
+                lives--; 
+                hit = 80;
+            }
+        }
 
 		if (keys[0]) {
 			ship.move("LEFT");
@@ -125,32 +125,49 @@ public class OuterSpace extends Canvas implements KeyListener, Runnable {
 			ship.move("DOWN");
 		}
 
-		if (keys[4] && countdown == 0) { // adding 20 helps move the ammo pos so it appears to be fired from the center,
-			// get y so the bullet starts at the same pos as the ship
-			// and speed of 5
-			// paint is called every frame, so countdown will decrement every 35 frames
-			shots.add(new Ammo(ship.getX() + 20, ship.getY(), 5));
+		if (keys[4] && countdown == 0) {
+			shots.add(new Ammo(ship.getX() + 20, ship.getY(), 5)); // getX() + 20 to make the bullet to appear centered, speed to 5
 			countdown = 35;
 			keys[4] = false;
 		}
 		if (countdown > 0) {
 			countdown--;
-		}
+			}
+
+		// Draw hearts for lives in the top left corner
+        for (int i = 0; i < 3; i++) {
+            if (heartImage != null) { // sometimes the image may not load
+                if (i < lives) {
+                    graphToBack.drawImage(heartImage, 10 + i * 40, 10, 32, 32, null); // i * 40 
+                } else {
+                    // draw a slightly faded heart
+                    graphToBack.drawImage(heartImage, 10 + i * 40, 10, 32, 32, null);
+                    graphToBack.setColor(new java.awt.Color(0,0,0,120));
+                    graphToBack.fillRect(10 + i * 40, 10, 32, 32); // overlay a semi-transparent rectangle
+                }
+            } else {
+                // Fallback: red for life, gray for lost
+                graphToBack.setColor(i < lives ? Color.RED : Color.DARK_GRAY);
+                if (i < lives) {
+                    graphToBack.fillOval(10 + i * 40, 10, 32, 32);
+                } else {
+                    graphToBack.drawOval(10 + i * 40, 10, 32, 32);
+                }
+            }
+        }
 
 		// draw all the objects so you can see them on the graphics
-
 		shots.drawEmAll(graphToBack);
 		horde.drawEmAll(graphToBack);
-
 		shots.moveEmAll();
 		horde.removeDeadOnes(shots.getList());
-
-		// ship.draw(graphToBack);
 		twoDGraph.drawImage(back, null, 0, 0);
 		back = null;
 	}
 
 	public void keyPressed(KeyEvent e) {
+		if (lives <= 0)
+			return; // so the ship cant move after the game ends
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			keys[0] = true;
 		}
@@ -170,6 +187,8 @@ public class OuterSpace extends Canvas implements KeyListener, Runnable {
 	}
 
 	public void keyReleased(KeyEvent e) {
+		if (lives <= 0)
+			return; // so the ship cant move after end game
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			keys[0] = false;
 		}
@@ -189,8 +208,7 @@ public class OuterSpace extends Canvas implements KeyListener, Runnable {
 	}
 
 	public void keyTyped(KeyEvent e) {
-		// method needs to be implemented
-		// because class implements KeyListner
+		// method needs to be implemented because class implements KeyListner
 	}
 
 	public void run() {
