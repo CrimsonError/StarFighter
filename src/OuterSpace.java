@@ -74,7 +74,7 @@ public class OuterSpace extends Canvas implements KeyListener, Runnable {
 		 * take a snap shot of the current screen and save it as an image
 		 * that is the exact same width and height as the current screen
 		 * because the screen is constantly changing
-		 */ 
+		 */
 
 		if (back == null)
 			back = (BufferedImage) (createImage(getWidth(), getHeight()));
@@ -98,19 +98,19 @@ public class OuterSpace extends Canvas implements KeyListener, Runnable {
 		 * total of 80 for 4 on/off cycles of 20
 		 */
 
-        if (hit > 0) {
-            
-            if ((hit / 20) % 2 == 0) { 
-                ship.draw(graphToBack);
-            }
-            hit--;
-        } else {
-            ship.draw(graphToBack);
-            if (horde.hitPlayer(ship)) { 
-                lives--; 
-                hit = 80;
-            }
-        }
+		if (hit > 0) {
+
+			if ((hit / 20) % 2 == 0) {
+				ship.draw(graphToBack);
+			}
+			hit--;
+		} else {
+			ship.draw(graphToBack);
+			if (horde.hitPlayer(ship)) {
+				lives--;
+				hit = 80;
+			}
+		}
 
 		if (keys[0]) {
 			ship.move("LEFT");
@@ -126,35 +126,27 @@ public class OuterSpace extends Canvas implements KeyListener, Runnable {
 		}
 
 		if (keys[4] && countdown == 0) {
-			shots.add(new Ammo(ship.getX() + 20, ship.getY(), 5)); // getX() + 20 to make the bullet to appear centered, speed to 5
+			shots.add(new Ammo(ship.getX() + 20, ship.getY(), 5)); // getX() + 20 to make the bullet to appear centered,
+																	// speed to 5
 			countdown = 35;
 			keys[4] = false;
 		}
 		if (countdown > 0) {
 			countdown--;
+		}
+
+		// draw hearts for lives in the top left corner
+		for (int i = 0; i < lives; i++) {
+			if (heartImage != null) { // sometimes the image may not load
+				if (i < lives) {
+					graphToBack.drawImage(heartImage, 10 + i * 40, 10, 32, 32, null); // normally draw it in the corner
+				}
 			}
 
-		// Draw hearts for lives in the top left corner
-        for (int i = 0; i < 3; i++) {
-            if (heartImage != null) { // sometimes the image may not load
-                if (i < lives) {
-                    graphToBack.drawImage(heartImage, 10 + i * 40, 10, 32, 32, null); // i * 40 
-                } else {
-                    // draw a slightly faded heart
-                    graphToBack.drawImage(heartImage, 10 + i * 40, 10, 32, 32, null);
-                    graphToBack.setColor(new java.awt.Color(0,0,0,120));
-                    graphToBack.fillRect(10 + i * 40, 10, 32, 32); // overlay a semi-transparent rectangle
-                }
-            } else {
-                // Fallback: red for life, gray for lost
-                graphToBack.setColor(i < lives ? Color.RED : Color.DARK_GRAY);
-                if (i < lives) {
-                    graphToBack.fillOval(10 + i * 40, 10, 32, 32);
-                } else {
-                    graphToBack.drawOval(10 + i * 40, 10, 32, 32);
-                }
-            }
-        }
+			else {
+				System.out.println("Error: failed to load heartImage");
+			}
+		}
 
 		// draw all the objects so you can see them on the graphics
 		shots.drawEmAll(graphToBack);
