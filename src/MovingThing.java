@@ -34,6 +34,8 @@ public abstract class MovingThing implements Moveable {
 		this.y = y;
 	}
 
+	// class cannot have objects instantiated from it, but something other classes can extend
+
 	public void setWidth(int width) {
 		this.width = width;
 	}

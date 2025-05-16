@@ -70,7 +70,7 @@ public class AlienHorde {
 
 	/*
 	 * Makes sure the left side of the ship is to the left of the right side of the
-	 * alien
+	 * alien (indicated by width)
 	 * Right side of the ship is to the right of the left side of the alien
 	 * Top side of the ship is above the bottom side of the alien
 	 * Bottom side of the ship is below the top side of the alien

@@ -3,6 +3,7 @@
 // add graphics for lives
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Canvas;
@@ -85,33 +86,6 @@ public class OuterSpace extends Canvas implements KeyListener, Runnable {
 		graphToBack.setColor(Color.BLACK);
 		graphToBack.fillRect(0, 0, getWidth(), getHeight());
 
-		if (lives <= 0) {
-			horde.removeAll(); // kill all aliens
-			graphToBack.setColor(Color.RED); // change the background color to red
-			graphToBack.drawString("GAME OVER", 100, 300); // draw the game over message
-		}
-
-		/*
-		 * the flicker effect, ship blinks twice when hit
-		 * blink off for 20 frames, on for 20 frames (%), and repeat that twice
-		 * normal starting condition will have the else happen, drawing it normally
-		 * total of 80 for 4 on/off cycles of 20
-		 */
-
-		if (hit > 0) {
-
-			if ((hit / 20) % 2 == 0) {
-				ship.draw(graphToBack);
-			}
-			hit--;
-		} else {
-			ship.draw(graphToBack);
-			if (horde.hitPlayer(ship)) {
-				lives--;
-				hit = 80;
-			}
-		}
-
 		if (keys[0]) {
 			ship.move("LEFT");
 		}
@@ -126,8 +100,7 @@ public class OuterSpace extends Canvas implements KeyListener, Runnable {
 		}
 
 		if (keys[4] && countdown == 0) {
-			shots.add(new Ammo(ship.getX() + 20, ship.getY(), 5)); // getX() + 20 to make the bullet to appear centered,
-																	// speed to 5
+			shots.add(new Ammo(ship.getX() + 20, ship.getY(), 5)); // getX() + 20 to make the bullet to appear centered
 			countdown = 35;
 			keys[4] = false;
 		}
@@ -148,10 +121,38 @@ public class OuterSpace extends Canvas implements KeyListener, Runnable {
 			}
 		}
 
+		/*
+		 * total of 80 for 4 on/off cycles of 20
+		 * hit / 20 divides hit by 20, making the number decrease in steps
+		 * when hit 20 is even )80, 60, 40, 20) the ship drawn
+		 * else its not drawn
+		 */
+
 		// draw all the objects so you can see them on the graphics
 		shots.drawEmAll(graphToBack);
 		horde.drawEmAll(graphToBack);
 		shots.moveEmAll();
+
+		if (lives <= 0) {
+			horde.removeAll(); // kill all aliens
+			graphToBack.setColor(Color.RED); // change the background color to red
+			graphToBack.setFont(new Font("Arial", Font.BOLD, 60));
+			graphToBack.drawString("GAME OVER", 100, 300); // draw the game over message
+		}
+
+		if (hit > 0) {
+			if ((hit / 20) % 2 == 0) {
+				ship.draw(graphToBack);
+			}
+			hit--;
+		} else {
+			ship.draw(graphToBack);
+			if (horde.hitPlayer(ship)) {
+				lives--;
+				hit = 80; //reset frame counter back to 80
+			}
+		}
+
 		horde.removeDeadOnes(shots.getList());
 		twoDGraph.drawImage(back, null, 0, 0);
 		back = null;

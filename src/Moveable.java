@@ -1,4 +1,7 @@
 public interface Moveable {
+
+    // interfaces are things that define a set of methods an
+    // shares a common behavior
     public void setPos(int x, int y);
 
     public void setX(int x);
